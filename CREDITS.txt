@@ -1,0 +1,7 @@
+This is a project by ISProjects (http://www.isprojects.nl)
+
+Original creator Martijn Faassen for ISProjects.
+
+Thanks to https://github.com/joshdrake/django-rest-framework-json-schema for
+inspiration on how to construct the converters, though the code has since
+radically diverged.
