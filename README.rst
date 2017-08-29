@@ -99,23 +99,20 @@ Here is an overview of the known differences:
 How to install
 --------------
 
-```
-$ pip install drf_jsonschema
-```
+::
+
+  $ pip install drf_jsonschema
+
 Hacking on it
 -------------
 
-First install in a working env:
+First install in a working env::
 
-```
 $ pip install -r develop_requirements
-```
 
-You can run the tests:
+You can run the tests::
 
-```
-$ py.test
-```
+  py.test
 
 Not yet supported are
 ---------------------
