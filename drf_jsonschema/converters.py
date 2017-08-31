@@ -2,7 +2,7 @@
 from rest_framework.settings import api_settings
 from rest_framework import serializers
 from .convert import converter, field_to_jsonschema
-from .fields import JSONSchemaField
+from .fields import JSONSchemaField, SerializerJSONField
 
 
 class Error(Exception):
@@ -241,6 +241,14 @@ class DictField:
 @converter
 class JSONSchemaFieldConverter:
     field_class = JSONSchemaField
+
+    def convert(self, field):
+        return field.schema
+
+
+@converter
+class SerializerJSONFieldConverter:
+    field_class = SerializerJSONField
 
     def convert(self, field):
         return field.schema

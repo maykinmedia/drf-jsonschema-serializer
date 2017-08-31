@@ -1,7 +1,7 @@
 import pytest
 from rest_framework import serializers
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-from drf_jsonschema import to_jsonschema, JSONSchemaField
+from drf_jsonschema import to_jsonschema, JSONSchemaField, SerializerJSONField
 from .models import Album, Track
 
 
@@ -1337,6 +1337,40 @@ class HelpTextIsDescription(serializers.Serializer):
 
     valid = []
     invalid = []
+
+
+class SJFSerializer(serializers.Serializer):
+    foo = serializers.IntegerField()
+
+
+@register
+class SerializerJSON(serializers.Serializer):
+    json = SerializerJSONField(SJFSerializer)
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "json": {
+                "type": "object",
+                "title": "Json",
+                "properties": {
+                    "foo": {"type": "integer", "title": "Foo"}
+                },
+                "required": ["foo"]
+            }
+        },
+        "required": ['json']
+    }
+
+    valid = [
+        {'json': {'foo': 1}}
+    ]
+    invalid = [
+        {'json': {'foo': 'Not a number'}}
+    ]
+    invalid_by_schema = [
+        {'json': {'foo': '1'}}
+    ]
 
 
 def test_correct_generated_schema(serializer_class, expected_json_schema):
