@@ -9,8 +9,11 @@ following:
 
 * Convert a DRF serializer into a JSON Schema.
 
-* Provides JSONSchemaField that can validate JSON data according to
+* Provides ``JSONSchemaField`` that can validate JSON data according to
   a JSON schema.
+
+* Provides a ``SerializerJSONField`` that can validate JSON data according to
+  a serializer for a field.
 
 This lets you use client-side form libraries such as react-jsonschema-form to
 generate a web form from a serializer. This way you can use the same schema for
@@ -25,6 +28,17 @@ Once validated, the JSON can be processed further or stored directly in a
 database, for instance using the PostgreSQL JSONField. When you turn a DRF
 serializer that contains ``JSONSchemaField`` fields into a JSON Schema, their
 JSON schemas are embedded in the larger schema that represents the serializer.
+
+What is the point of ``SerializerJSONField``? It's very similar to
+``JSONSchemaField`` and is used to store JSON directly in the database. Instead
+of passing in a JSON schema directly, you pass in a serializer class that is
+used to validate and convert the incoming JSON. A serializer class is sometimes
+more convenient as you can do additional validations on the server that a JSON
+Schema cannot do.
+
+``SerializerJSONField`` can be converted to a JSON Schema like any other
+serializer field, so it integrates with client-side form generation code.
+
 
 Basic usage of conversion
 -------------------------
@@ -60,6 +74,20 @@ Basic usage of JSONSchemaField
 
 This serializer can then be converted into a larger JSON schema that
 embeds the given schema using ``to_jsonschema`` as above.
+
+Basic usage of SerializerJSONField
+----------------------------------
+
+::
+
+    from rest_framework import serializers
+    from drf_jsonschema import SerializerJSONField
+
+    class MySerializer(serializers.Serializer):
+        foo = serializers.IntegerField()
+
+    class MySerializer(serializers.Serializer):
+        data = SerializerJSONField(MySerializer)
 
 Conversion limitations
 ----------------------
