@@ -1151,6 +1151,43 @@ class ModelSerializerWithRelatedSerializer(serializers.ModelSerializer):
 
 
 @register
+class PrimaryKeyRelatedField(serializers.ModelSerializer):
+    # album is a foreign key
+    class Meta:
+        model = Track
+        fields = ('album', 'order', 'title', 'duration')
+
+    json_schema = {
+       "type": "object",
+       "properties": {
+           "album": {
+               "type": "integer",
+               "title": "Album"
+           },
+           "order": {
+               "type": "integer",
+               "title": "Order",
+               "description": "The order of the track"
+           },
+           "title": {
+               "type": "string",
+               "title": "Title",
+               "maxLength": 100,
+               "minLength": 1
+           },
+           "duration": {
+               "type": "integer",
+               "title": "Duration"
+           }
+       },
+       "required": ['album', 'order', 'title', 'duration']
+    }
+
+    valid = []
+    invalid = []
+
+
+@register
 class StringRelatedField(serializers.ModelSerializer):
     tracks = serializers.StringRelatedField(many=True)
 
