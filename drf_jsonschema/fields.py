@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from jsonschema import Draft4Validator, FormatChecker
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-
+from .convert import to_jsonschema
 
 _DEFAULT = object()
 
@@ -37,3 +37,21 @@ class JSONSchemaField(serializers.Field):
             raise serializers.ValidationError(e.message)
 
         return data
+
+
+class SerializerJSONField(serializers.Field):
+    """A field that stores JSON but uses a serializer to validate.
+    """
+    def __init__(self, serializer_class, *args, **kw):
+        super(SerializerJSONField, self).__init__(*args, **kw)
+        self.serializer_class = serializer_class
+        self.schema = to_jsonschema(serializer_class())
+
+    def to_representation(self, obj):
+        return obj
+
+    def to_internal_value(self, data):
+        serializer = self.serializer_class(data=data)
+        if not serializer.is_valid():
+            serializer.run_validation(data)
+        return serializer.validated_data

@@ -1,6 +1,6 @@
 import pytest
 from rest_framework import serializers
-from drf_jsonschema import JSONSchemaField
+from drf_jsonschema import JSONSchemaField, SerializerJSONField
 
 schema = {
     'type': 'object',
@@ -82,3 +82,42 @@ def test_invalid_json_field_in_serializer():
     serializer = TestSerializer(data={'json': {'a': 'foo', 'b': 'nonumber'}})
     assert not serializer.is_valid()
     assert serializer.validated_data == {}
+
+
+def test_serializer_json_field():
+    class MySerializer(serializers.Serializer):
+        foo = serializers.IntegerField()
+
+    class TestSerializer(serializers.Serializer):
+        json = SerializerJSONField(MySerializer)
+
+    serializer = TestSerializer(data={'json': {'foo': 42}})
+    assert serializer.is_valid()
+    assert serializer.validated_data == {
+        'json': {
+            'foo': 42
+        }
+    }
+
+    serializer = TestSerializer(data={'json': {'foo': "Not a number!"}})
+    assert not serializer.is_valid()
+
+    serializer = TestSerializer(data={'json': {'foo': "44"}})
+    assert serializer.is_valid()
+    assert serializer.validated_data == {
+        'json': {
+            'foo': 44
+        }
+    }
+
+
+def test_serializer_json_field_error():
+    class MySerializer(serializers.Serializer):
+        foo = serializers.IntegerField()
+
+    field = SerializerJSONField(MySerializer)
+    with pytest.raises(serializers.ValidationError) as e:
+        field.run_validation({'foo': "Not a number!"})
+    # FIXME: is this really the right structure for errors in this
+    # case?
+    assert e.value.detail == {'foo': ["A valid integer is required."]}
