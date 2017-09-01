@@ -93,7 +93,7 @@ def test_serializer_json_field():
 
     serializer = TestSerializer(data={'json': {'foo': 42}})
     assert serializer.is_valid()
-    assert serializer.validated_data == {
+    assert dict(serializer.validated_data) == {
         'json': {
             'foo': 42
         }
@@ -104,7 +104,7 @@ def test_serializer_json_field():
 
     serializer = TestSerializer(data={'json': {'foo': "44"}})
     assert serializer.is_valid()
-    assert serializer.validated_data == {
+    assert dict(serializer.validated_data) == {
         'json': {
             'foo': 44
         }
@@ -121,3 +121,22 @@ def test_serializer_json_field_error():
     # FIXME: is this really the right structure for errors in this
     # case?
     assert e.value.detail == {'foo': ["A valid integer is required."]}
+
+
+def test_serializer_json_field_decimal():
+    class MySerializer(serializers.Serializer):
+        foo = serializers.DecimalField(None, 2)
+
+    class TestSerializer(serializers.Serializer):
+        json = SerializerJSONField(MySerializer)
+
+    serializer = TestSerializer(data={'json': {'foo': '42.1'}})
+    assert serializer.is_valid()
+    assert dict(serializer.validated_data) == {
+        'json': {
+            'foo': '42.10'
+        }
+    }
+
+    serializer = TestSerializer(data={'json': {'foo': "Not a number!"}})
+    assert not serializer.is_valid()

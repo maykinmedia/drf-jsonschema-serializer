@@ -54,4 +54,4 @@ class SerializerJSONField(serializers.Field):
         serializer = self.serializer_class(data=data)
         if not serializer.is_valid():
             serializer.run_validation(data)
-        return serializer.validated_data
+        return serializer.data
