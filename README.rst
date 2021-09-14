@@ -1,6 +1,10 @@
 Django REST Framework JSON Schema support
 =========================================
 
+Many thanks to https://github.com/isprojects for the initial work on this library. 
+As of September 2021, Maykin Media has taken up maintenance of this package after
+transferring it from isprojects. See the issues on Github for the roadmap.
+
 What does this do?
 ------------------
 
