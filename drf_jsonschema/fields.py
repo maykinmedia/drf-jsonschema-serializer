@@ -24,8 +24,31 @@ class JSONSchemaField(serializers.Field):
         self.schema = schema
         if format_checker is _DEFAULT:
             format_checker = FormatChecker()
-        self.validator = Draft4Validator(schema, types, resolver,
-                                         format_checker)
+        try:
+            # jsonschema v3.x
+            self.validator = Draft4Validator(schema, types, resolver,
+                                             format_checker)
+        except TypeError:
+            # jsonschema v4.x
+            validator_class = Draft4Validator
+
+            if types:
+                from jsonschema import TypeChecker
+                from jsonschema.validators import extend
+
+                if not isinstance(types, TypeChecker):
+                    raise ValueError(
+                        "For jsonschema version 4.x or newer, `types` must "
+                        "be a jsonschema.TypeChecker instance"
+                    )
+
+                validator_class = extend(validator_class, type_checker=types)
+
+            self.validator = validator_class(
+                schema,
+                resolver,
+                format_checker,
+            )
 
     def to_representation(self, obj):
         return obj

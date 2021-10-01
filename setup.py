@@ -28,7 +28,7 @@ setup(
         'django',
         'jsonschema',
         'rfc3987',
-        'strict-rfc3339'
+        'rfc3339-validator'
     ],
     extras_require=dict(
         test=[
