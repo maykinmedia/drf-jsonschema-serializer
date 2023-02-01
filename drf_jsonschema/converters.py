@@ -76,7 +76,7 @@ class URLFieldConverter(CharFieldConverter):
 @converter
 class BooleanFieldConverter(Converter):
     type = 'boolean'
-    field_class = [serializers.BooleanField, serializers.NullBooleanField]
+    field_class = [serializers.BooleanField]
 
 
 @converter
