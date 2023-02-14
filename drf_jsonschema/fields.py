@@ -1,6 +1,7 @@
-from rest_framework import serializers
-from jsonschema import Draft4Validator, FormatChecker
+from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
+from rest_framework import serializers
+
 from .convert import to_jsonschema
 
 _DEFAULT = object()
@@ -17,15 +18,15 @@ class JSONSchemaField(serializers.Field):
     PostgreSQL ``django.contrib.postgres.JSONField``).
     """
 
-    def __init__(self, schema, types=(), resolver=None,
-                 format_checker=_DEFAULT, *args, **kw):
+    def __init__(
+        self, schema, resolver=None, format_checker=_DEFAULT, *args, **kw
+    ):
         super(JSONSchemaField, self).__init__(*args, **kw)
-        Draft4Validator.check_schema(schema)
+        Draft202012Validator.check_schema(schema)
         self.schema = schema
         if format_checker is _DEFAULT:
             format_checker = FormatChecker()
-        self.validator = Draft4Validator(schema, types, resolver,
-                                         format_checker)
+        self.validator = Draft202012Validator(schema, resolver, format_checker)
 
     def to_representation(self, obj):
         return obj
@@ -40,8 +41,8 @@ class JSONSchemaField(serializers.Field):
 
 
 class SerializerJSONField(serializers.Field):
-    """A field that stores JSON but uses a serializer to validate.
-    """
+    """A field that stores JSON but uses a serializer to validate."""
+
     def __init__(self, serializer_class, *args, **kw):
         super(SerializerJSONField, self).__init__(*args, **kw)
         self.serializer_class = serializer_class

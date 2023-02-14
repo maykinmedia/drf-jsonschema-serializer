@@ -3,8 +3,8 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 current_dir = Path(__file__).parent.parent
@@ -16,10 +16,10 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testapp.settings")
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'drf-jsonschema'
-copyright = '2023, Maykin Media'
-author = 'Maykin Media'
-release = '0.1.0'
+project = "drf-jsonschema"
+copyright = "2023, Maykin Media"
+author = "Maykin Media"
+release = "0.1.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -29,9 +29,8 @@ extensions = [
     "sphinx.ext.todo",
 ]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
