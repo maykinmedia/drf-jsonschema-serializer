@@ -3,6 +3,9 @@ __pycache__
 *.egg-info
 .vscode
 
+/build/
+/dist/
+
 .pytest_cache
 .tox
 /reports
