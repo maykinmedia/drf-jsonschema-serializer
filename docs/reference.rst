@@ -43,6 +43,25 @@ Public API
 .. automodule:: drf_jsonschema
     :members:
 
+Schema validation strictness
+============================
+
+:class:`drf_jsonschema.JSONSchemaField` performs schema validation to a varying degree
+of strictness. Many format validations are implemented via additional, optional
+libraries. For a reference of builtins, see ``jsonschema._formats`` and look for the
+attempted imports.
+
+For convenience sake, we define an extra package that installs all of them (at the time
+of writing):
+
+.. code-block::
+
+    pip install drf-jsonschema[all-format-validators]
+
+Alternatively, you can set these up for yourself and use this list as inspiration.
+
+Without some of these packages, an invalid URI format would not raise a validation
+error, for example.
 
 Unsupported
 ===========
