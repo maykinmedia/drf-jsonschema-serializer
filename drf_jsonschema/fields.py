@@ -1,8 +1,12 @@
-from jsonschema import Draft202012Validator, FormatChecker
+from typing import Optional, Type, TypeVar
+
+from jsonschema import Draft202012Validator, FormatChecker, RefResolver
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
 
 from .convert import to_jsonschema
+
+T = TypeVar("T")
 
 _DEFAULT = object()
 
@@ -19,19 +23,24 @@ class JSONSchemaField(serializers.Field):
     """
 
     def __init__(
-        self, schema, resolver=None, format_checker=_DEFAULT, *args, **kw
+        self,
+        schema: dict,
+        resolver: Optional[RefResolver] = None,
+        format_checker: FormatChecker | object = _DEFAULT,
+        *args,
+        **kwargs,
     ):
-        super(JSONSchemaField, self).__init__(*args, **kw)
+        super(JSONSchemaField, self).__init__(*args, **kwargs)
         Draft202012Validator.check_schema(schema)
         self.schema = schema
         if format_checker is _DEFAULT:
             format_checker = FormatChecker()
         self.validator = Draft202012Validator(schema, resolver, format_checker)
 
-    def to_representation(self, obj):
+    def to_representation(self, obj: T) -> T:
         return obj
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data: T) -> T:
         try:
             self.validator.validate(data)
         except JSONSchemaValidationError as e:
@@ -43,12 +52,12 @@ class JSONSchemaField(serializers.Field):
 class SerializerJSONField(serializers.Field):
     """A field that stores JSON but uses a serializer to validate."""
 
-    def __init__(self, serializer_class, *args, **kw):
+    def __init__(self, serializer_class: Type[serializers.Serializer], *args, **kw):
         super(SerializerJSONField, self).__init__(*args, **kw)
         self.serializer_class = serializer_class
         self.schema = to_jsonschema(serializer_class())
 
-    def to_representation(self, obj):
+    def to_representation(self, obj: T) -> T:
         return obj
 
     def to_internal_value(self, data):
