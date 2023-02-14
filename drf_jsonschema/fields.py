@@ -1,4 +1,4 @@
-from typing import Optional, Type, TypeVar
+from typing import Optional, Type, TypeVar, Union
 
 from jsonschema import Draft202012Validator, FormatChecker, RefResolver
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
@@ -26,7 +26,7 @@ class JSONSchemaField(serializers.Field):
         self,
         schema: dict,
         resolver: Optional[RefResolver] = None,
-        format_checker: FormatChecker | object = _DEFAULT,
+        format_checker: Union[FormatChecker, object] = _DEFAULT,
         *args,
         **kwargs,
     ):

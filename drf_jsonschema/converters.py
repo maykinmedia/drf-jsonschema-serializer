@@ -1,9 +1,14 @@
 # convert a serializer to a JSON Schema.
-from rest_framework import serializers
+from typing import Any, Dict, List, Sequence, Type, Union
+
+from rest_framework import fields, serializers
 from rest_framework.settings import api_settings
 
 from .convert import converter, field_to_jsonschema
 from .fields import JSONSchemaField, SerializerJSONField
+
+FieldCls = Type[fields.Field]
+FieldClass = Union[FieldCls, List[FieldCls]]
 
 
 class Error(Exception):
@@ -11,10 +16,12 @@ class Error(Exception):
 
 
 class Converter:
-    type = None
+    type: str = ""
+    field_class: FieldClass
 
-    def convert(self, field):
-        assert self.type is not None
+    def convert(self, field) -> Dict[str, Any]:
+        assert self.type, "A type must be specified"
+        type: Union[str, List[str]]
         if field.allow_null:
             type = [self.type, "null"]
         else:
@@ -24,11 +31,11 @@ class Converter:
 
 class FormatConverter(Converter):
     type = "string"
-    format = None
+    format: str = ""
 
     def convert(self, field):
         result = super(FormatConverter, self).convert(field)
-        if self.format is not None:
+        if self.format:
             result["format"] = self.format
         return result
 
@@ -36,8 +43,7 @@ class FormatConverter(Converter):
 @converter
 class CharFieldConverter(FormatConverter):
     type = "string"
-    format = None
-    field_class = serializers.CharField
+    field_class: FieldClass = serializers.CharField
 
     def convert(self, field):
         result = super(CharFieldConverter, self).convert(field)
@@ -83,7 +89,7 @@ class BooleanFieldConverter(Converter):
 @converter
 class FloatFieldConverter(Converter):
     type = "number"
-    field_class = serializers.FloatField
+    field_class: FieldClass = serializers.FloatField
 
     def convert(self, field):
         result = super(FloatFieldConverter, self).convert(field)
@@ -121,9 +127,9 @@ class BaseDateTimeFieldConverter(FormatConverter):
     type = "string"
     format = "date-time"
 
-    expected_input_formats = None
-    settings_format = None
-    settings_input_formats = None
+    expected_input_formats: List[str]
+    settings_format: str
+    settings_input_formats: Sequence[str]
 
     def convert(self, field):
         # ugh had to copy from DRF
