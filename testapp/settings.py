@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -18,8 +19,8 @@ INSTALLED_APPS = [
     "testapp",
 ]
 
-MIDDLEWARE = []
+MIDDLEWARE: List[str] = []
 
-TEMPLATES = []
+TEMPLATES: List[dict] = []
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
