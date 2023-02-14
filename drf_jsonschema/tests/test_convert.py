@@ -52,7 +52,7 @@ class BooleanFieldNotRequired(serializers.Serializer):
 
 @register
 class NullBooleanFieldBasic(serializers.Serializer):
-    foo = serializers.NullBooleanField()
+    foo = serializers.BooleanField(allow_null=True)
 
     json_schema = {
         "type": "object",
