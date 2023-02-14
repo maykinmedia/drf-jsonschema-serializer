@@ -1,10 +1,10 @@
-=========================================
-Django REST Framework JSON Schema support
-=========================================
+.. drf-jsonschema documentation master file, created by
+   sphinx-quickstart on Tue Feb 14 17:29:29 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-:Version: 0.1.0
-:Source: https://github.com/maykinmedia/drf-jsonschema
-:Keywords: django, rest, jsonschema
+Django REST Framework JSON Schema
+=================================
 
 |build-status| |coverage| |linting| |black| |docs|
 
@@ -31,8 +31,6 @@ generate a web form from a serializer. This way you can use the same schema for
 client-side form generation and validation as you use for REST service input
 validation.
 
-See the documentation_ for getting started and usage examples.
-
 Credits and roadmap
 ===================
 
@@ -41,6 +39,23 @@ As of September 2021, Maykin Media has taken up maintenance of this package afte
 transferring it from isprojects. See the issues on Github for the roadmap.
 
 See also CREDITS.txt for a full history of authorship.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   quickstart
+   usage
+   reference
+   developers
+   changelog
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
 .. |build-status| image:: https://github.com/maykinmedia/drf-jsonschema/workflows/ci/badge.svg
     :target: https://github.com/maykinmedia/drf-jsonschema/actions/workflows/ci.yml
@@ -51,7 +66,7 @@ See also CREDITS.txt for a full history of authorship.
     :alt: Linting and code quality
 
 .. |coverage| image:: https://codecov.io/gh/maykinmedia/drf-jsonschema/branch/main/graph/badge.svg
-    :target: https://app.codecov.io/gh/maykinmedia/drf-jsonschema
+    :target: https://codecov.io/gh/maykinmedia/drf-jsonschema
     :alt: Coverage status
 
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/drf-jsonschema.svg

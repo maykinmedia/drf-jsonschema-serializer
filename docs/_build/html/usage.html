@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; drf-jsonschema 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python API reference" href="reference.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            drf-jsonschema
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-does-this-do">What does this do?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage-of-conversion">Basic usage of conversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage-of-jsonschemafield">Basic usage of JSONSchemaField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage-of-serializerjsonfield">Basic usage of SerializerJSONField</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">drf-jsonschema</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
+<section id="what-does-this-do">
+<h2>What does this do?<a class="headerlink" href="#what-does-this-do" title="Permalink to this heading"></a></h2>
+<p><a class="reference internal" href="reference.html#drf_jsonschema.JSONSchemaField" title="drf_jsonschema.JSONSchemaField"><code class="xref py py-class docutils literal notranslate"><span class="pre">drf_jsonschema.JSONSchemaField</span></code></a> allows you to express complex data structures
+with a JSON Schema. Data that comes in via a POST or PUT request is validated against
+the supplied schema.</p>
+<p>Once validated, the JSON can be processed further or stored directly in a
+database, for instance using <code class="xref py py-class docutils literal notranslate"><span class="pre">models.JSONField</span></code>. When you turn a DRF serializer
+that contains <a class="reference internal" href="reference.html#drf_jsonschema.JSONSchemaField" title="drf_jsonschema.JSONSchemaField"><code class="xref py py-class docutils literal notranslate"><span class="pre">drf_jsonschema.JSONSchemaField</span></code></a> fields into a JSON Schema, their
+JSON schemas are embedded in the larger schema that represents the serializer.</p>
+<p>What is the point of <a class="reference internal" href="reference.html#drf_jsonschema.SerializerJSONField" title="drf_jsonschema.SerializerJSONField"><code class="xref py py-class docutils literal notranslate"><span class="pre">drf_jsonschema.SerializerJSONField</span></code></a>? It’s very similar to
+<a class="reference internal" href="reference.html#drf_jsonschema.JSONSchemaField" title="drf_jsonschema.JSONSchemaField"><code class="xref py py-class docutils literal notranslate"><span class="pre">drf_jsonschema.JSONSchemaField</span></code></a> and is used to store JSON directly in the
+database. Instead of passing in a JSON schema directly, you pass in a serializer class
+that is used to validate and convert the incoming JSON. A serializer class is sometimes
+more convenient as you can do additional validations on the server that a JSON Schema
+cannot do.</p>
+<p><a class="reference internal" href="reference.html#drf_jsonschema.SerializerJSONField" title="drf_jsonschema.SerializerJSONField"><code class="xref py py-class docutils literal notranslate"><span class="pre">drf_jsonschema.SerializerJSONField</span></code></a> can be converted to a JSON Schema like any
+other serializer field, so it integrates with client-side form generation code.</p>
+</section>
+<section id="basic-usage-of-conversion">
+<h2>Basic usage of conversion<a class="headerlink" href="#basic-usage-of-conversion" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drf_jsonschema</span> <span class="kn">import</span> <span class="n">to_jsonschema</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+
+<span class="k">class</span> <span class="nc">MySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
+
+<span class="n">json_schema</span> <span class="o">=</span> <span class="n">to_jsonschema</span><span class="p">(</span><span class="n">MySerializer</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-usage-of-jsonschemafield">
+<h2>Basic usage of JSONSchemaField<a class="headerlink" href="#basic-usage-of-jsonschemafield" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drf_jsonschema</span> <span class="kn">import</span> <span class="n">JSONSchemaField</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="n">my_schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span> <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">MySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">)</span>
+     <span class="n">data</span> <span class="o">=</span> <span class="n">JSONSchemaField</span><span class="p">(</span><span class="n">my_schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This serializer can then be converted into a larger JSON schema that
+embeds the given schema using <code class="docutils literal notranslate"><span class="pre">to_jsonschema</span></code> as above.</p>
+</section>
+<section id="basic-usage-of-serializerjsonfield">
+<h2>Basic usage of SerializerJSONField<a class="headerlink" href="#basic-usage-of-serializerjsonfield" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">drf_jsonschema</span> <span class="kn">import</span> <span class="n">SerializerJSONField</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+
+
+<span class="k">class</span> <span class="nc">MySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">MySerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">Serializer</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">SerializerJSONField</span><span class="p">(</span><span class="n">MySerializer</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="Python API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Maykin Media.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

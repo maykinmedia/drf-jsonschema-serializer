@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from rest_framework.utils.field_mapping import ClassLookupDict
 
-field_to_converter = ClassLookupDict({})
+field_to_converter: ClassLookupDict = ClassLookupDict({})
 
 
 def converter(converter_class):
@@ -23,9 +23,9 @@ def field_to_jsonschema(field):
         converter = field_to_converter[field]
         result = converter.convert(field)
     if field.label:
-        result['title'] = field.label
+        result["title"] = field.label
     if field.help_text:
-        result['description'] = field.help_text
+        result["description"] = field.help_text
     return result
 
 
@@ -40,10 +40,7 @@ def to_jsonschema(serializer):
             required.append(name)
         properties[name] = sub_schema
 
-    result = {
-        'type': 'object',
-        'properties': properties
-    }
+    result = {"type": "object", "properties": properties}
     if required:
-        result['required'] = required
+        result["required"] = required
     return result

@@ -1,9 +1,9 @@
 import pytest
-from rest_framework import serializers
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-from drf_jsonschema import to_jsonschema, JSONSchemaField, SerializerJSONField
-from .models import Album, Track
+from rest_framework import serializers
 
+from drf_jsonschema import JSONSchemaField, SerializerJSONField, to_jsonschema
+from testapp.models import Album, Track
 
 registered_serializer_classes = []
 
@@ -19,19 +19,22 @@ class BooleanFieldBasic(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "boolean", "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "boolean", "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": True}, {"foo": False}]
     invalid = [{}, {"foo": "something"}, {"foo": None}]
     # the serializer actually accepts 0 and 1 and "true" and "false"
     # and even "0" and "1"
-    invalid_by_schema = [{"foo": 0}, {"foo": 1},
-                         {"foo": "true"}, {"foo": "false"},
-                         {"foo": "0"}, {"foo": "1"}]
+    invalid_by_schema = [
+        {"foo": 0},
+        {"foo": 1},
+        {"foo": "true"},
+        {"foo": "false"},
+        {"foo": "0"},
+        {"foo": "1"},
+    ]
 
 
 @register
@@ -40,9 +43,7 @@ class BooleanFieldNotRequired(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "boolean", "title": "Foo"}
-        }
+        "properties": {"foo": {"type": "boolean", "title": "Foo"}},
     }
 
     valid = [{"foo": True}, {"foo": False}, {}]
@@ -56,10 +57,8 @@ class NullBooleanFieldBasic(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": ["boolean", "null"], "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": ["boolean", "null"], "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": True}, {"foo": False}, {"foo": None}]
@@ -72,10 +71,8 @@ class CharFieldBasic(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "string", "minLength": 1, "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "string", "minLength": 1, "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": "something"}]
@@ -90,10 +87,9 @@ class CharFieldMaxLength(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "string", "minLength": 1, "maxLength": 10,
-                    "title": "Foo"}
+            "foo": {"type": "string", "minLength": 1, "maxLength": 10, "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "x" * 10}]
@@ -107,10 +103,9 @@ class CharFieldAllowNull(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": ["string", "null"], "minLength": 1,
-                    "title": "Foo"}
+            "foo": {"type": ["string", "null"], "minLength": 1, "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "something"}, {"foo": None}]
@@ -123,10 +118,7 @@ class CharFieldNotRequired(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "string", "minLength": 1,
-                    "title": "Foo"}
-        }
+        "properties": {"foo": {"type": "string", "minLength": 1, "title": "Foo"}},
     }
 
     valid = [{"foo": "something"}, {}]
@@ -140,10 +132,9 @@ class EmailFieldBasic(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "string", "minLength": 1, "format": "email",
-                    "title": "Foo"}
+            "foo": {"type": "string", "minLength": 1, "format": "email", "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "someone@example.com"}]
@@ -152,20 +143,23 @@ class EmailFieldBasic(serializers.Serializer):
 
 @register
 class RegexFieldBasic(serializers.Serializer):
-    foo = serializers.RegexField(regex='^[0-9]+$')
+    foo = serializers.RegexField(regex="^[0-9]+$")
 
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "string", "minLength": 1, "pattern": "^[0-9]+$",
-                    "title": "Foo"}
+            "foo": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[0-9]+$",
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "1"}, {"foo": "123"}]
-    invalid = [{}, {"foo": ""}, {"foo": None},
-               {"foo": "someone"}, {"foo": "12foo"}]
+    invalid = [{}, {"foo": ""}, {"foo": None}, {"foo": "someone"}, {"foo": "12foo"}]
 
 
 @register
@@ -176,18 +170,17 @@ class SlugFieldBasic(serializers.Serializer):
         "type": "object",
         "properties": {
             "foo": {
-                "type": "string", "minLength": 1,
+                "type": "string",
+                "minLength": 1,
                 "pattern": "^[-a-zA-Z0-9_]+$",
-                "title": "Foo"
+                "title": "Foo",
             }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
-    valid = [{"foo": "1"}, {"foo": "123"}, {"foo": "foo12"},
-             {"foo": "12something"}]
-    invalid = [{}, {"foo": ""}, {"foo": None},
-               {"foo": "$$$"}, {"foo": "!foo"}]
+    valid = [{"foo": "1"}, {"foo": "123"}, {"foo": "foo12"}, {"foo": "12something"}]
+    invalid = [{}, {"foo": ""}, {"foo": None}, {"foo": "$$$"}, {"foo": "!foo"}]
 
 
 @register
@@ -197,13 +190,9 @@ class URLFieldBasic(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {
-                "type": "string", "minLength": 1,
-                "format": "uri",
-                "title": "Foo"
-            }
+            "foo": {"type": "string", "minLength": 1, "format": "uri", "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "http://example.com"}]
@@ -216,15 +205,12 @@ class IntegerField(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "integer", "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "integer", "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 1}]
-    invalid = [{}, {"foo": "something"}, {"foo": None}, {"foo": 1.5},
-               {"foo": "10.5"}]
+    invalid = [{}, {"foo": "something"}, {"foo": None}, {"foo": 1.5}, {"foo": "10.5"}]
     # the serializer actually accepts strings
     invalid_by_schema = [{"foo": "10"}]
 
@@ -235,15 +221,20 @@ class IntegerFieldMinValue(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "integer", "minimum": 10, "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "integer", "minimum": 10, "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 10}, {"foo": 11}]
-    invalid = [{}, {"foo": "something"}, {"foo": None},
-               {"foo": 1}, {"foo": 1.5}, {"foo": 9}, {"foo": 10.5}]
+    invalid = [
+        {},
+        {"foo": "something"},
+        {"foo": None},
+        {"foo": 1},
+        {"foo": 1.5},
+        {"foo": 9},
+        {"foo": 10.5},
+    ]
 
 
 @register
@@ -252,15 +243,19 @@ class IntegerFieldMaxValue(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "integer", "maximum": 10, "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "integer", "maximum": 10, "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 10}, {"foo": 1}]
-    invalid = [{}, {"foo": "something"}, {"foo": None},
-               {"foo": 11}, {"foo": 1.5}, {"foo": 10.5}]
+    invalid = [
+        {},
+        {"foo": "something"},
+        {"foo": None},
+        {"foo": 11},
+        {"foo": 1.5},
+        {"foo": 10.5},
+    ]
 
 
 @register
@@ -269,10 +264,8 @@ class FloatField(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "number", "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "number", "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 10}, {"foo": 10.5}]
@@ -287,15 +280,19 @@ class FloatFieldMinValue(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "number", "minimum": 10, "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "number", "minimum": 10, "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 10}, {"foo": 10.5}]
-    invalid = [{}, {"foo": "something"}, {"foo": None},
-               {"foo": 1}, {"foo": 1.5}, {"foo": 9.9}]
+    invalid = [
+        {},
+        {"foo": "something"},
+        {"foo": None},
+        {"foo": 1},
+        {"foo": 1.5},
+        {"foo": 9.9},
+    ]
 
 
 @register
@@ -304,15 +301,12 @@ class FloatFieldMaxValue(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "number", "maximum": 10, "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "number", "maximum": 10, "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 9}, {"foo": 9.5}]
-    invalid = [{}, {"foo": "something"}, {"foo": None},
-               {"foo": 10.5}, {"foo": 11}]
+    invalid = [{}, {"foo": "something"}, {"foo": None}, {"foo": 10.5}, {"foo": 11}]
 
 
 @register
@@ -325,15 +319,22 @@ class DecimalField(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "string",
-                    "pattern": "^\\-?[0-9]*(\\.[0-9]{1,2})?$",
-                    "title": "Foo"}
+            "foo": {
+                "type": "string",
+                "pattern": "^\\-?[0-9]*(\\.[0-9]{1,2})?$",
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
-    valid = [{"foo": "10"}, {"foo": "10.5"}, {"foo": "-1.5"},
-             {'foo': "9999999999.5"}, {'foo': ".5"}]
+    valid = [
+        {"foo": "10"},
+        {"foo": "10.5"},
+        {"foo": "-1.5"},
+        {"foo": "9999999999.5"},
+        {"foo": ".5"},
+    ]
     invalid = [{}, {"foo": "something"}, {"foo": None}, {"foo": "1.123"}]
     # the serializer actually accepts numbers too
     # (but a string is used by the JSON if coerce_to_string is True,
@@ -348,11 +349,9 @@ class DateTimeField(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "string",
-                    "format": "date-time",
-                    "title": "Foo"}
+            "foo": {"type": "string", "format": "date-time", "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "2017-01-12T16:01:56Z"}]
@@ -368,165 +367,129 @@ class DateField(serializers.Serializer):
 
     json_schema = {
         "type": "object",
-        "properties": {
-            "foo": {"type": "string",
-                    "format": "date",
-                    "title": "Foo"}
-        },
-        "required": ["foo"]
+        "properties": {"foo": {"type": "string", "format": "date", "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": "2017-01-12"}]
-    invalid = [{},
-               {"foo": "something"},
-               {"foo": "2017-01-12T16:01:00:Z"},
-               {"foo": "2017-01"},
-               {"foo": "2017-14-01"}]
+    invalid = [
+        {},
+        {"foo": "something"},
+        {"foo": "2017-01-12T16:01:00:Z"},
+        {"foo": "2017-01"},
+        {"foo": "2017-14-01"},
+    ]
 
 
 @register
 class ChoiceFieldStrings(serializers.Serializer):
-    foo = serializers.ChoiceField(['a', 'b', 'c'])
+    foo = serializers.ChoiceField(["a", "b", "c"])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "string",
-                    "enum": ["a", "b", "c"],
-                    "title": "Foo"}
+            "foo": {"type": "string", "enum": ["a", "b", "c"], "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "a"}, {"foo": "b"}, {"foo": "c"}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 1}]
 
 
 @register
 class ChoiceFieldStringsAllowBlank(serializers.Serializer):
-    foo = serializers.ChoiceField(['a', 'b', 'c'], allow_blank=True)
+    foo = serializers.ChoiceField(["a", "b", "c"], allow_blank=True)
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "string",
-                    "enum": ["", "a", "b", "c"],
-                    "title": "Foo"}
+            "foo": {"type": "string", "enum": ["", "a", "b", "c"], "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "a"}, {"foo": "b"}, {"foo": "c"}, {"foo": ""}]
-    invalid = [
-        {},
-        {"foo": None},
-
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": "d"}, {"foo": 1}]
 
 
 @register
 class ChoiceFieldStringsBlankChoice(serializers.Serializer):
-    foo = serializers.ChoiceField(['', 'a', 'b', 'c'])
+    foo = serializers.ChoiceField(["", "a", "b", "c"])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "string",
-                    "enum": ["", "a", "b", "c"],
-                    "title": "Foo"}
+            "foo": {"type": "string", "enum": ["", "a", "b", "c"], "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "a"}, {"foo": "b"}, {"foo": "c"}, {"foo": ""}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": "d"}, {"foo": 1}]
 
 
 @register
 class ChoiceFieldStringsAllowNull(serializers.Serializer):
-    foo = serializers.ChoiceField(['a', 'b', 'c'], allow_null=True)
+    foo = serializers.ChoiceField(["a", "b", "c"], allow_null=True)
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": ["null", "string"],
-                    "enum": [None, "a", "b", "c"],
-                    "enumNames": ['', "a", "b", "c"],
-                    "title": "Foo"}
+            "foo": {
+                "type": ["null", "string"],
+                "enum": [None, "a", "b", "c"],
+                "enumNames": ["", "a", "b", "c"],
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "a"}, {"foo": "b"}, {"foo": "c"}, {"foo": None}]
-    invalid = [
-        {},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": ""}, {"foo": "d"}, {"foo": 1}]
 
 
 @register
 class ChoiceFieldStringsNullChoice(serializers.Serializer):
-    foo = serializers.ChoiceField([(None, 'Nothing'), 'a', 'b', 'c'],
-                                  allow_null=True)
+    foo = serializers.ChoiceField([(None, "Nothing"), "a", "b", "c"], allow_null=True)
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": ["null", "string"],
-                    "enum": [None, "a", "b", "c"],
-                    "enumNames": ['Nothing', "a", "b", "c"],
-                    "title": "Foo"}
+            "foo": {
+                "type": ["null", "string"],
+                "enum": [None, "a", "b", "c"],
+                "enumNames": ["Nothing", "a", "b", "c"],
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "a"}, {"foo": "b"}, {"foo": "c"}, {"foo": None}]
-    invalid = [
-        {},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": ""}, {"foo": "d"}, {"foo": 1}]
 
 
 @register
 class ChoiceFieldDisplayNames(serializers.Serializer):
-    foo = serializers.ChoiceField([('a', 'A'), ('b', 'B'), ('c', 'C')])
+    foo = serializers.ChoiceField([("a", "A"), ("b", "B"), ("c", "C")])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "string",
-                    "enum": ["a", "b", "c"],
-                    "enumNames": ["A", "B", "C"],
-                    "title": "Foo"}
+            "foo": {
+                "type": "string",
+                "enum": ["a", "b", "c"],
+                "enumNames": ["A", "B", "C"],
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": "a"}, {"foo": "b"}, {"foo": "c"}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 1}]
 
 
 @register
@@ -534,48 +497,34 @@ class ChoiceFieldInts(serializers.Serializer):
     foo = serializers.ChoiceField([1, 2, 3])
 
     json_schema = {
-        'type': "object",
-        "properties": {
-            "foo": {"type": "integer",
-                    "enum": [1, 2, 3],
-                    "title": "Foo"}
-        },
-        "required": ["foo"]
+        "type": "object",
+        "properties": {"foo": {"type": "integer", "enum": [1, 2, 3], "title": "Foo"}},
+        "required": ["foo"],
     }
 
     valid = [{"foo": 1}, {"foo": 2}, {"foo": 3}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 4}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 4}]
 
 
 @register
 class ChoiceFieldIntsDisplaynames(serializers.Serializer):
-    foo = serializers.ChoiceField([(1, 'One'), (2, 'Two'), (3, 'Three')])
+    foo = serializers.ChoiceField([(1, "One"), (2, "Two"), (3, "Three")])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "integer",
-                    "enum": [1, 2, 3],
-                    "enumNames": ['One', 'Two', 'Three'],
-                    "title": "Foo"}
+            "foo": {
+                "type": "integer",
+                "enum": [1, 2, 3],
+                "enumNames": ["One", "Two", "Three"],
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": 1}, {"foo": 2}, {"foo": 3}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 4}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 4}]
 
 
 @register
@@ -583,47 +532,31 @@ class ChoiceFieldFloats(serializers.Serializer):
     foo = serializers.ChoiceField([1.1, 2.1, 3.1])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "number",
-                    "enum": [1.1, 2.1, 3.1],
-                    "title": "Foo"}
+            "foo": {"type": "number", "enum": [1.1, 2.1, 3.1], "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": 1.1}, {"foo": 2.1}, {"foo": 3.1}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 4},
-        {"foo": 1.2}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 4}, {"foo": 1.2}]
 
 
 @register
 class ChoiceFieldMixed(serializers.Serializer):
-    foo = serializers.ChoiceField(['a', 1])
+    foo = serializers.ChoiceField(["a", 1])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": ["integer", "string"],
-                    "enum": ['a', 1],
-                    "title": "Foo"}
+            "foo": {"type": ["integer", "string"], "enum": ["a", 1], "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": 1}, {"foo": "a"}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": "b"},
-        {"foo": 3}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": "b"}, {"foo": 3}]
 
 
 @register
@@ -631,23 +564,15 @@ class ChoiceFieldBool(serializers.Serializer):
     foo = serializers.ChoiceField([False, True])
 
     json_schema = {
-        'type': "object",
+        "type": "object",
         "properties": {
-            "foo": {"type": "boolean",
-                    "enum": [False, True],
-                    "title": "Foo"}
+            "foo": {"type": "boolean", "enum": [False, True], "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": False}, {"foo": True}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": ""},
-        {"foo": "d"},
-        {"foo": 1}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 1}]
 
 
 class SubSerializer(serializers.Serializer):
@@ -667,38 +592,22 @@ class SubSerializerBasic(serializers.Serializer):
                 "type": "object",
                 "title": "Sub serializer!",
                 "properties": {
-                    "foo": {
-                        "type": "integer",
-                        "title": "Foo"
-                    },
-                    "bar": {
-                        "type": "string",
-                        "minLength": 1,
-                        "title": "Bar"
-                    }
+                    "foo": {"type": "integer", "title": "Foo"},
+                    "bar": {"type": "string", "minLength": 1, "title": "Bar"},
                 },
-                "required": ["foo", "bar"]
+                "required": ["foo", "bar"],
             },
-            "another": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Another"
-            }
+            "another": {"type": "string", "minLength": 1, "title": "Another"},
         },
-        "required": ["sub", "another"]
+        "required": ["sub", "another"],
     }
 
-    valid = [{
-        "sub": {
-            "foo": 3,
-            "bar": "BAR"
-        },
-        "another": "HALLO"
-    }]
-    invalid = [{},
-               {"sub": "what", "another": "HALLO"},
-               {"sub": {"foo": 3, "bar": ""},
-                "another": "HALLO"}]
+    valid = [{"sub": {"foo": 3, "bar": "BAR"}, "another": "HALLO"}]
+    invalid = [
+        {},
+        {"sub": "what", "another": "HALLO"},
+        {"sub": {"foo": 3, "bar": ""}, "another": "HALLO"},
+    ]
 
 
 @register
@@ -715,39 +624,26 @@ class SubSerializerMany(serializers.Serializer):
                 "items": {
                     "type": "object",
                     "properties": {
-                        "foo": {
-                            "type": "integer",
-                            "title": "Foo"
-                        },
-                        "bar": {
-                            "type": "string",
-                            "minLength": 1,
-                            "title": "Bar"
-                        }
+                        "foo": {"type": "integer", "title": "Foo"},
+                        "bar": {"type": "string", "minLength": 1, "title": "Bar"},
                     },
-                    "required": ["foo", "bar"]
-                    }
+                    "required": ["foo", "bar"],
                 },
-            "another": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Another"
-            }
+            },
+            "another": {"type": "string", "minLength": 1, "title": "Another"},
         },
-        "required": ["sub", "another"]
+        "required": ["sub", "another"],
     }
 
-    valid = [{
-        "sub": [{
-            "foo": 3,
-            "bar": "BAR"
-        }],
-        "another": "HALLO"
-    }, {"sub": [], "another": "HALLO"}]
-    invalid = [{},
-               {"sub": "what", "another": "HALLO"},
-               {"sub": [{"foo": 3, "bar": ""}],
-                "another": "HALLO"}]
+    valid = [
+        {"sub": [{"foo": 3, "bar": "BAR"}], "another": "HALLO"},
+        {"sub": [], "another": "HALLO"},
+    ]
+    invalid = [
+        {},
+        {"sub": "what", "another": "HALLO"},
+        {"sub": [{"foo": 3, "bar": ""}], "another": "HALLO"},
+    ]
 
 
 @register
@@ -765,40 +661,24 @@ class SubSerializerManyNotAllowEmpty(serializers.Serializer):
                 "items": {
                     "type": "object",
                     "properties": {
-                        "foo": {
-                            "type": "integer",
-                            "title": "Foo"
-                        },
-                        "bar": {
-                            "type": "string",
-                            "minLength": 1,
-                            "title": "Bar"
-                        }
+                        "foo": {"type": "integer", "title": "Foo"},
+                        "bar": {"type": "string", "minLength": 1, "title": "Bar"},
                     },
-                    "required": ["foo", "bar"]
-                    }
+                    "required": ["foo", "bar"],
                 },
-            "another": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Another"
-            }
+            },
+            "another": {"type": "string", "minLength": 1, "title": "Another"},
         },
-        "required": ["sub", "another"]
+        "required": ["sub", "another"],
     }
 
-    valid = [{
-        "sub": [{
-            "foo": 3,
-            "bar": "BAR"
-        }],
-        "another": "HALLO"
-    }]
-    invalid = [{},
-               {"sub": [], "another": "HALLO"},
-               {"sub": "what", "another": "HALLO"},
-               {"sub": [{"foo": 3, "bar": ""}],
-                "another": "HALLO"}]
+    valid = [{"sub": [{"foo": 3, "bar": "BAR"}], "another": "HALLO"}]
+    invalid = [
+        {},
+        {"sub": [], "another": "HALLO"},
+        {"sub": "what", "another": "HALLO"},
+        {"sub": [{"foo": 3, "bar": ""}], "another": "HALLO"},
+    ]
 
 
 @register
@@ -808,20 +688,13 @@ class ListFieldBasic(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "array",
-                    "items": {"type": "integer"},
-                    "title": "Foo"}
+            "foo": {"type": "array", "items": {"type": "integer"}, "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": [1, 2, 3]}, {"foo": []}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": 1},
-        {"foo": ""}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": 1}, {"foo": ""}]
 
 
 class IntegerListField(serializers.ListField):
@@ -835,20 +708,13 @@ class ListFieldDeclarative(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "array",
-                    "items": {"type": "integer"},
-                    "title": "Foo"}
+            "foo": {"type": "array", "items": {"type": "integer"}, "title": "Foo"}
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": [1, 2, 3]}, {"foo": []}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": 1},
-        {"foo": ""}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": 1}, {"foo": ""}]
 
 
 @register
@@ -858,22 +724,18 @@ class ListFieldMinLength(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "array",
-                    "items": {"type": "integer"},
-                    "minItems": 1,
-                    "title": "Foo"}
+            "foo": {
+                "type": "array",
+                "items": {"type": "integer"},
+                "minItems": 1,
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": [1, 2, 3]}, {"foo": [1]}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": 1},
-        {"foo": ""},
-        {"foo": []}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": 1}, {"foo": ""}, {"foo": []}]
 
 
 @register
@@ -883,22 +745,18 @@ class ListFieldMaxLength(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "array",
-                    "items": {"type": "integer"},
-                    "maxItems": 2,
-                    "title": "Foo"}
+            "foo": {
+                "type": "array",
+                "items": {"type": "integer"},
+                "maxItems": 2,
+                "title": "Foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": [1, 2]}, {"foo": []}]
-    invalid = [
-        {},
-        {"foo": None},
-        {"foo": 1},
-        {"foo": ""},
-        {"foo": [1, 2, 3]}
-    ]
+    invalid = [{}, {"foo": None}, {"foo": 1}, {"foo": ""}, {"foo": [1, 2, 3]}]
 
 
 @register
@@ -908,20 +766,20 @@ class ListFieldObject(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "array",
-                    "title": "Foo",
-                    "items": {"type": "object",
-                              "properties": {"foo": {"type": "integer",
-                                                     "title": "Foo"},
-                                             "bar": {"type": "string",
-                                                     "minLength": 1,
-                                                     "title": "Bar"}
-                                             },
-                              "required": ["foo", "bar"]
-                              }
-                    }
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "foo": {"type": "integer", "title": "Foo"},
+                        "bar": {"type": "string", "minLength": 1, "title": "Bar"},
+                    },
+                    "required": ["foo", "bar"],
+                },
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": [{"foo": 1, "bar": "BAR"}, {"foo": 2, "bar": "BAR2"}]}]
@@ -929,7 +787,7 @@ class ListFieldObject(serializers.Serializer):
         {},
         {"foo": None},
         {"foo": [{"foo": 1, "bar": False}]},
-        {"foo": [{"foo": 1}]}
+        {"foo": [{"foo": 1}]},
     ]
 
 
@@ -942,13 +800,11 @@ class DictFieldBasic(serializers.Serializer):
         "properties": {
             "foo": {
                 "type": "object",
-                "additionalProperties": {
-                    "type": "integer"
-                },
-                "title": "Foo"
+                "additionalProperties": {"type": "integer"},
+                "title": "Foo",
             }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": {"a": 1, "b": 2}}, {"foo": {}}]
@@ -973,19 +829,17 @@ class DictFieldObject(serializers.Serializer):
                     "type": "object",
                     "properties": {
                         "foo": {"type": "integer", "title": "Foo"},
-                        "bar": {"type": "string", "minLength": 1,
-                                "title": "Bar"}
+                        "bar": {"type": "string", "minLength": 1, "title": "Bar"},
                     },
-                    "required": ["foo", "bar"]
+                    "required": ["foo", "bar"],
                 },
-                "title": "Foo"
+                "title": "Foo",
             }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
-    valid = [{"foo": {"a": {"foo": 1, "bar": "BAR"},
-                      "b": {"foo": 2, "bar": "BAR2"}}}]
+    valid = [{"foo": {"a": {"foo": 1, "bar": "BAR"}, "b": {"foo": 2, "bar": "BAR2"}}}]
     invalid = [
         {},
         {"foo": None},
@@ -996,10 +850,9 @@ class DictFieldObject(serializers.Serializer):
 
 @register
 class JSONSchemaFieldBasic(serializers.Serializer):
-    foo = JSONSchemaField(schema={
-        "type": "object",
-        "properties": {"a": {"type": "integer"}}
-    })
+    foo = JSONSchemaField(
+        schema={"type": "object", "properties": {"a": {"type": "integer"}}}
+    )
 
     # FIXME: is it correct to add the title here?
     json_schema = {
@@ -1008,10 +861,10 @@ class JSONSchemaFieldBasic(serializers.Serializer):
             "foo": {
                 "type": "object",
                 "properties": {"a": {"type": "integer"}},
-                "title": "Foo"
+                "title": "Foo",
             }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = [{"foo": {"a": 1}}, {"foo": {}}]
@@ -1027,7 +880,7 @@ class JSONSchemaFieldBasic(serializers.Serializer):
 class ModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
-        fields = ('album_name', 'artist')
+        fields = ("album_name", "artist")
 
     json_schema = {
         "type": "object",
@@ -1036,16 +889,16 @@ class ModelSerializer(serializers.ModelSerializer):
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Album Name"  # note we take title from model field
+                "title": "Album Name",  # note we take title from model field
             },
             "artist": {
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Artist"
-            }
+                "title": "Artist",
+            },
         },
-        "required": ['album_name', 'artist']
+        "required": ["album_name", "artist"],
     }
 
     valid = []
@@ -1056,7 +909,7 @@ class ModelSerializer(serializers.ModelSerializer):
 class ModelSerializerWithRelated(serializers.ModelSerializer):
     class Meta:
         model = Album
-        fields = ('album_name', 'artist', 'tracks')
+        fields = ("album_name", "artist", "tracks")
 
     json_schema = {
         "type": "object",
@@ -1065,23 +918,21 @@ class ModelSerializerWithRelated(serializers.ModelSerializer):
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Album Name"
+                "title": "Album Name",
             },
             "artist": {
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Artist"
+                "title": "Artist",
             },
             "tracks": {
                 "type": "array",
                 "title": "Tracks",
-                "items": {
-                    "type": "integer"
-                }
-            }
+                "items": {"type": "integer"},
+            },
         },
-        "required": ['album_name', 'artist', 'tracks']
+        "required": ["album_name", "artist", "tracks"],
     }
 
     valid = []
@@ -1091,7 +942,7 @@ class ModelSerializerWithRelated(serializers.ModelSerializer):
 class TrackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Track
-        fields = ('order', 'title', 'duration')
+        fields = ("order", "title", "duration")
 
 
 @register
@@ -1100,7 +951,7 @@ class ModelSerializerWithRelatedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Album
-        fields = ('album_name', 'artist', 'tracks')
+        fields = ("album_name", "artist", "tracks")
 
     json_schema = {
         "type": "object",
@@ -1109,13 +960,13 @@ class ModelSerializerWithRelatedSerializer(serializers.ModelSerializer):
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Album Name"
+                "title": "Album Name",
             },
             "artist": {
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Artist"
+                "title": "Artist",
             },
             "tracks": {
                 "type": "array",
@@ -1126,24 +977,21 @@ class ModelSerializerWithRelatedSerializer(serializers.ModelSerializer):
                         "order": {
                             "type": "integer",
                             "title": "Order",
-                            "description": "The order of the track"
+                            "description": "The order of the track",
                         },
                         "title": {
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 100,
-                            "title": "Title"
+                            "title": "Title",
                         },
-                        "duration": {
-                            "type": "integer",
-                            "title": "Duration"
-                        }
+                        "duration": {"type": "integer", "title": "Duration"},
                     },
-                    "required": ['order', 'title', 'duration']
-                }
-            }
+                    "required": ["order", "title", "duration"],
+                },
+            },
         },
-        "required": ['album_name', 'artist', 'tracks']
+        "required": ["album_name", "artist", "tracks"],
     }
 
     valid = []
@@ -1155,32 +1003,26 @@ class PrimaryKeyRelatedField(serializers.ModelSerializer):
     # album is a foreign key
     class Meta:
         model = Track
-        fields = ('album', 'order', 'title', 'duration')
+        fields = ("album", "order", "title", "duration")
 
     json_schema = {
-       "type": "object",
-       "properties": {
-           "album": {
-               "type": "integer",
-               "title": "Album"
-           },
-           "order": {
-               "type": "integer",
-               "title": "Order",
-               "description": "The order of the track"
-           },
-           "title": {
-               "type": "string",
-               "title": "Title",
-               "maxLength": 100,
-               "minLength": 1
-           },
-           "duration": {
-               "type": "integer",
-               "title": "Duration"
-           }
-       },
-       "required": ['album', 'order', 'title', 'duration']
+        "type": "object",
+        "properties": {
+            "album": {"type": "integer", "title": "Album"},
+            "order": {
+                "type": "integer",
+                "title": "Order",
+                "description": "The order of the track",
+            },
+            "title": {
+                "type": "string",
+                "title": "Title",
+                "maxLength": 100,
+                "minLength": 1,
+            },
+            "duration": {"type": "integer", "title": "Duration"},
+        },
+        "required": ["album", "order", "title", "duration"],
     }
 
     valid = []
@@ -1193,7 +1035,7 @@ class StringRelatedField(serializers.ModelSerializer):
 
     class Meta:
         model = Album
-        fields = ('album_name', 'artist', 'tracks')
+        fields = ("album_name", "artist", "tracks")
 
     json_schema = {
         "type": "object",
@@ -1202,23 +1044,17 @@ class StringRelatedField(serializers.ModelSerializer):
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Album Name"
+                "title": "Album Name",
             },
             "artist": {
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Artist"
+                "title": "Artist",
             },
-            "tracks": {
-                "type": "array",
-                "title": "Tracks",
-                "items": {
-                    "type": "string"
-                }
-            }
+            "tracks": {"type": "array", "title": "Tracks", "items": {"type": "string"}},
         },
-        "required": ['album_name', 'artist', 'tracks']
+        "required": ["album_name", "artist", "tracks"],
     }
 
     valid = []
@@ -1227,13 +1063,13 @@ class StringRelatedField(serializers.ModelSerializer):
 
 @register
 class HyperlinkedRelatedField(serializers.ModelSerializer):
-    tracks = serializers.HyperlinkedRelatedField(many=True,
-                                                 queryset=Track.objects,
-                                                 view_name='fake')
+    tracks = serializers.HyperlinkedRelatedField(
+        many=True, queryset=Track.objects, view_name="fake"
+    )
 
     class Meta:
         model = Album
-        fields = ('album_name', 'artist', 'tracks')
+        fields = ("album_name", "artist", "tracks")
 
     json_schema = {
         "type": "object",
@@ -1242,24 +1078,21 @@ class HyperlinkedRelatedField(serializers.ModelSerializer):
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Album Name"
+                "title": "Album Name",
             },
             "artist": {
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Artist"
+                "title": "Artist",
             },
             "tracks": {
                 "type": "array",
                 "title": "Tracks",
-                "items": {
-                    "type": "string",
-                    "format": "uri"
-                }
-            }
+                "items": {"type": "string", "format": "uri"},
+            },
         },
-        "required": ['album_name', 'artist', 'tracks']
+        "required": ["album_name", "artist", "tracks"],
     }
 
     valid = []
@@ -1268,13 +1101,13 @@ class HyperlinkedRelatedField(serializers.ModelSerializer):
 
 @register
 class SlugRelatedField(serializers.ModelSerializer):
-    tracks = serializers.SlugRelatedField(many=True,
-                                          queryset=Track.objects,
-                                          slug_field='title')
+    tracks = serializers.SlugRelatedField(
+        many=True, queryset=Track.objects, slug_field="title"
+    )
 
     class Meta:
         model = Album
-        fields = ('album_name', 'artist', 'tracks')
+        fields = ("album_name", "artist", "tracks")
 
     json_schema = {
         "type": "object",
@@ -1283,24 +1116,21 @@ class SlugRelatedField(serializers.ModelSerializer):
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Album Name"
+                "title": "Album Name",
             },
             "artist": {
                 "type": "string",
                 "maxLength": 100,
                 "minLength": 1,
-                "title": "Artist"
+                "title": "Artist",
             },
             "tracks": {
                 "type": "array",
                 "title": "Tracks",
-                "items": {
-                    "type": "string",
-                    "pattern": "^[-a-zA-Z0-9_]+$"
-                }
-            }
+                "items": {"type": "string", "pattern": "^[-a-zA-Z0-9_]+$"},
+            },
         },
-        "required": ['album_name', 'artist', 'tracks']
+        "required": ["album_name", "artist", "tracks"],
     }
 
     valid = []
@@ -1311,14 +1141,9 @@ class SlugRelatedField(serializers.ModelSerializer):
 class ReadOnlyIsNotConverted(serializers.Serializer):
     foo = serializers.CharField(read_only=True)
 
-    json_schema = {
-        "type": "object",
-        "properties": {
-        }
-    }
+    json_schema = {"type": "object", "properties": {}}
 
-    valid = [{"foo": "something"}, {}, {"foo": ""}, {"foo": None},
-             {"foo": False}]
+    valid = [{"foo": "something"}, {}, {"foo": ""}, {"foo": None}, {"foo": False}]
     invalid = []
 
 
@@ -1329,10 +1154,14 @@ class HelpTextIsDescription(serializers.Serializer):
     json_schema = {
         "type": "object",
         "properties": {
-            "foo": {"type": "string", "minLength": 1, "title": "Foo",
-                    "description": "This is really a foo"}
+            "foo": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Foo",
+                "description": "This is really a foo",
+            }
         },
-        "required": ["foo"]
+        "required": ["foo"],
     }
 
     valid = []
@@ -1353,24 +1182,16 @@ class SerializerJSON(serializers.Serializer):
             "json": {
                 "type": "object",
                 "title": "Json",
-                "properties": {
-                    "foo": {"type": "integer", "title": "Foo"}
-                },
-                "required": ["foo"]
+                "properties": {"foo": {"type": "integer", "title": "Foo"}},
+                "required": ["foo"],
             }
         },
-        "required": ['json']
+        "required": ["json"],
     }
 
-    valid = [
-        {'json': {'foo': 1}}
-    ]
-    invalid = [
-        {'json': {'foo': 'Not a number'}}
-    ]
-    invalid_by_schema = [
-        {'json': {'foo': '1'}}
-    ]
+    valid = [{"json": {"foo": 1}}]
+    invalid = [{"json": {"foo": "Not a number"}}]
+    invalid_by_schema = [{"json": {"foo": "1"}}]
 
 
 def test_correct_generated_schema(serializer_class, expected_json_schema):

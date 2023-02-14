@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API reference &mdash; drf-jsonschema 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributors" href="developers.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            drf-jsonschema
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#conversion-limitations">Conversion limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-drf_jsonschema">Public API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#drf_jsonschema.JSONSchemaField"><code class="docutils literal notranslate"><span class="pre">JSONSchemaField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#drf_jsonschema.JSONSchemaField.to_internal_value"><code class="docutils literal notranslate"><span class="pre">JSONSchemaField.to_internal_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#drf_jsonschema.JSONSchemaField.to_representation"><code class="docutils literal notranslate"><span class="pre">JSONSchemaField.to_representation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#drf_jsonschema.SerializerJSONField"><code class="docutils literal notranslate"><span class="pre">SerializerJSONField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#drf_jsonschema.SerializerJSONField.to_internal_value"><code class="docutils literal notranslate"><span class="pre">SerializerJSONField.to_internal_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#drf_jsonschema.SerializerJSONField.to_representation"><code class="docutils literal notranslate"><span class="pre">SerializerJSONField.to_representation()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#unsupported">Unsupported</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fields">Fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-todos">Known todos</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">drf-jsonschema</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python API reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-api-reference">
+<h1>Python API reference<a class="headerlink" href="#python-api-reference" title="Permalink to this heading"></a></h1>
+<section id="conversion-limitations">
+<h2>Conversion limitations<a class="headerlink" href="#conversion-limitations" title="Permalink to this heading"></a></h2>
+<p>We do our best to convert the DRF serializer into a JSON Schema, but not
+all constructs of the DRF serializer can be fully converted. We try to
+fail fast in such cases, but we don’t detect everything yet. In addition
+the JSON Schema is often more strict than what the DRF serializer accepts.</p>
+<p>Here is an overview of the known differences:</p>
+<ul class="simple">
+<li><p>CharField: The serializer accepts numbers and converts them to strings,
+but the JSON schema only accepts strings.</p></li>
+<li><p>RegexField: The Python regex is literally exported to the JSON Schema,
+without taking into account any differences between Python regexes and
+the regexes supported by JSON Schema.</p></li>
+<li><p>BooleanField and NullBooleanField: the serializer accepts values such
+as 0, 1, “0”, “1”, “true”, “false” in addition to the JSON <code class="docutils literal notranslate"><span class="pre">true</span></code> and
+<code class="docutils literal notranslate"><span class="pre">false</span></code>. JSON Schema is strict and only accepts the real <code class="docutils literal notranslate"><span class="pre">true</span></code>
+and <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p>FloatField and IntegerField: these accept strings such as “10” that can
+be converted into a number. JSON Schema is strict and only accepts JSON
+numbers.</p></li>
+<li><p>DecimalField: these are converted to a “string” property with a regex pattern.
+<code class="docutils literal notranslate"><span class="pre">max_digits</span></code> is not supported. <code class="docutils literal notranslate"><span class="pre">coerce_to_string</span></code> must always be <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+Not converted are <cite>min_value`</cite> and <code class="docutils literal notranslate"><span class="pre">max_value</span></code>.</p></li>
+<li><p>DateTimeField and DateField: only the default date/time formats are supported.</p></li>
+<li><p>ChoiceField: only basic datatypes (string, float, int, bool, None) are
+accepted.</p></li>
+</ul>
+</section>
+<section id="module-drf_jsonschema">
+<span id="public-api"></span><h2>Public API<a class="headerlink" href="#module-drf_jsonschema" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="drf_jsonschema.JSONSchemaField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">drf_jsonschema.</span></span><span class="sig-name descname"><span class="pre">JSONSchemaField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drf_jsonschema.JSONSchemaField" title="Permalink to this definition"></a></dt>
+<dd><p>A field that validates incoming data against a JSON Schema.</p>
+<p>This field takes incoming data as Python data structures (objects,
+lists, strings, numbers, bool, None) that is the equivalent of JSON.
+After validation the same structure is returned.</p>
+<p>The data can then be stored in a native JSON field (for instance a
+PostgreSQL <code class="docutils literal notranslate"><span class="pre">django.contrib.postgres.JSONField</span></code>).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="drf_jsonschema.JSONSchemaField.to_internal_value">
+<span class="sig-name descname"><span class="pre">to_internal_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drf_jsonschema.JSONSchemaField.to_internal_value" title="Permalink to this definition"></a></dt>
+<dd><p>Transform the <em>incoming</em> primitive data into a native value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="drf_jsonschema.JSONSchemaField.to_representation">
+<span class="sig-name descname"><span class="pre">to_representation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drf_jsonschema.JSONSchemaField.to_representation" title="Permalink to this definition"></a></dt>
+<dd><p>Transform the <em>outgoing</em> native value into primitive data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="drf_jsonschema.SerializerJSONField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">drf_jsonschema.</span></span><span class="sig-name descname"><span class="pre">SerializerJSONField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drf_jsonschema.SerializerJSONField" title="Permalink to this definition"></a></dt>
+<dd><p>A field that stores JSON but uses a serializer to validate.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="drf_jsonschema.SerializerJSONField.to_internal_value">
+<span class="sig-name descname"><span class="pre">to_internal_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drf_jsonschema.SerializerJSONField.to_internal_value" title="Permalink to this definition"></a></dt>
+<dd><p>Transform the <em>incoming</em> primitive data into a native value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="drf_jsonschema.SerializerJSONField.to_representation">
+<span class="sig-name descname"><span class="pre">to_representation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#drf_jsonschema.SerializerJSONField.to_representation" title="Permalink to this definition"></a></dt>
+<dd><p>Transform the <em>outgoing</em> native value into primitive data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="unsupported">
+<h2>Unsupported<a class="headerlink" href="#unsupported" title="Permalink to this heading"></a></h2>
+<p>Contributions welcome to add support!</p>
+<section id="fields">
+<h3>Fields<a class="headerlink" href="#fields" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>UUIDField</p></li>
+<li><p>IPAddressField</p></li>
+<li><p>FileField</p></li>
+<li><p>FilePathField</p></li>
+<li><p>TimeField</p></li>
+<li><p>DurationField</p></li>
+<li><p>MultipleChoiceField</p></li>
+<li><p>ImageField</p></li>
+<li><p>JSONField (but see JSONSchemaField)</p></li>
+<li><p>ReadOnlyField</p></li>
+<li><p>HiddenField</p></li>
+<li><p>ModelField</p></li>
+<li><p>SerializerMethodField</p></li>
+<li><p>HyperlinkedIdentityField</p></li>
+</ul>
+</section>
+<section id="known-todos">
+<h3>Known todos<a class="headerlink" href="#known-todos" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>PrimaryKeyRelatedField: support pk_field option</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="developers.html" class="btn btn-neutral float-right" title="Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Maykin Media.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
