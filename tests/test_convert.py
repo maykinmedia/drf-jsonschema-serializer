@@ -3,7 +3,6 @@ from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
 from rest_framework import serializers
 
 from drf_jsonschema import JSONSchemaField, SerializerJSONField, to_jsonschema
-
 from testapp.models import Album, Track
 
 registered_serializer_classes = []

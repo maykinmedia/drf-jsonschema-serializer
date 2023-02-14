@@ -2,7 +2,9 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 
 def make_validator(serializer_class):
-    return Draft202012Validator(serializer_class.json_schema, format_checker=FormatChecker())
+    return Draft202012Validator(
+        serializer_class.json_schema, format_checker=FormatChecker()
+    )
 
 
 def get_valid_for_serializer(serializer_class):

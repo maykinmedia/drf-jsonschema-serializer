@@ -3,7 +3,6 @@ from jsonschema import validate
 from rest_framework import serializers
 
 from drf_jsonschema import to_jsonschema
-
 from testapp.models import Album, Track
 
 
