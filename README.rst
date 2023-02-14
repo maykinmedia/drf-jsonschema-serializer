@@ -42,11 +42,11 @@ transferring it from isprojects. See the issues on Github for the roadmap.
 
 See also CREDITS.txt for a full history of authorship.
 
-.. |build-status| image:: https://github.com/maykinmedia/drf-jsonschema/workflows/ci/badge.svg
+.. |build-status| image:: https://github.com/maykinmedia/drf-jsonschema/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/maykinmedia/drf-jsonschema/actions/workflows/ci.yml
     :alt: Tests and PyPI publishing
 
-.. |linting| image:: https://github.com/maykinmedia/drf-jsonschema/workflows/code-quality/badge.svg
+.. |linting| image:: https://github.com/maykinmedia/drf-jsonschema/actions/workflows/code-quality.yml/badge.svg
     :target: https://github.com/maykinmedia/drf-jsonschema/actions/workflows/code-quality.yml
     :alt: Linting and code quality
 
