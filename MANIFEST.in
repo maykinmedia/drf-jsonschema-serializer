@@ -1,6 +1,7 @@
 include LICENSE
 include README.md
 include tox.ini
+include drf_jsonschema/py.typed
 recursive-include docs *.md *.html *.txt *.py
 recursive-exclude * __pycache__
 global-exclude *pyc
