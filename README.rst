@@ -47,7 +47,7 @@ serializer field, so it integrates with client-side form generation code.
 Basic usage of conversion
 -------------------------
 
-::
+.. code-block:: python
 
     from rest_framework import serializers
     from drf_jsonschema import to_jsonschema
@@ -60,7 +60,7 @@ Basic usage of conversion
 Basic usage of JSONSchemaField
 ------------------------------
 
-::
+.. code-block:: python
 
     from rest_framework import serializers
     from drf_jsonschema import JSONSchemaField
@@ -82,7 +82,7 @@ embeds the given schema using ``to_jsonschema`` as above.
 Basic usage of SerializerJSONField
 ----------------------------------
 
-::
+.. code-block:: python
 
     from rest_framework import serializers
     from drf_jsonschema import SerializerJSONField
@@ -131,20 +131,27 @@ Here is an overview of the known differences:
 How to install
 --------------
 
-::
+.. code-block:: bash
 
-  $ pip install drf_jsonschema
+    pip install drf-jsonschema
 
 Hacking on it
 -------------
 
 First install in a working env::
 
-$ pip install -r develop_requirements
+.. code-block:: bash
 
-You can run the tests::
+    pip install -e .[tests]
 
-  py.test
+You can run the tests
+---------------------
+
+.. code-block:: bash
+
+    pytest
+    # or
+    tox
 
 Not yet supported are
 ---------------------
@@ -181,7 +188,3 @@ Known todos
 -----------
 
 * PrimaryKeyRelatedField: support pk_field option
-
-* Python 2 support.
-
-Contributions are welcome!
