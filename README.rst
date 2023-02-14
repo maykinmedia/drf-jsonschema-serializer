@@ -51,7 +51,7 @@ See also CREDITS.txt for a full history of authorship.
     :alt: Linting and code quality
 
 .. |coverage| image:: https://codecov.io/gh/maykinmedia/drf-jsonschema/branch/main/graph/badge.svg
-    :target: https://codecov.io/gh/maykinmedia/drf-jsonschema
+    :target: https://app.codecov.io/gh/maykinmedia/drf-jsonschema
     :alt: Coverage status
 
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/drf-jsonschema.svg
