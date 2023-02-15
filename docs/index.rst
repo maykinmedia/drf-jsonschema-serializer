@@ -71,7 +71,7 @@ Indices and tables
 
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/drf-jsonschema-serializer.svg
 
-.. |django-versions| image:: https://img.shields.io/pypi/djversions/drf-jsonschema-serializer.svg
+.. |django-versions| image:: https://img.shields.io/pypi/frameworkversions/django/drf-jsonschema-serializer.svg
 
 .. |pypi-version| image:: https://img.shields.io/pypi/v/drf-jsonschema-serializer.svg
     :target: https://pypi.org/project/drf-jsonschema-serializer/
@@ -79,8 +79,8 @@ Indices and tables
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
-.. |docs| image:: https://readthedocs.org/projects/drf-jsonschema-serializer/badge/?version=latest
-    :target: https://drf-jsonschema-serializer.readthedocs.io/en/latest/?badge=latest
+.. |docs| image:: https://readthedocs.org/projects/drf-jsonschema/badge/?version=latest
+    :target: https://drf-jsonschema.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. _documentation: https://drf-jsonschema-serializer.readthedocs.io/
+.. _documentation: https://drf-jsonschema.readthedocs.io/
