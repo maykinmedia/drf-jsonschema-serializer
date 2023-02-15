@@ -1,7 +1,7 @@
 import pytest
 from rest_framework import serializers
 
-from drf_jsonschema import JSONSchemaField, SerializerJSONField
+from drf_jsonschema_serializer import JSONSchemaField, SerializerJSONField
 
 schema = {
     "type": "object",

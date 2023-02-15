@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 current_dir = Path(__file__).parent.parent
-code_directory = current_dir / "drf_jsonschema"
+code_directory = current_dir / "drf_jsonschema_serializer"
 
 sys.path.insert(0, str(code_directory))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testapp.settings")
@@ -16,7 +16,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testapp.settings")
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "drf-jsonschema"
+project = "drf-jsonschema-serializer"
 copyright = "2023, Maykin Media"
 author = "Maykin Media"
 release = "0.1.0"

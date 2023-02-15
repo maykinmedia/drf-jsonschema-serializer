@@ -1,8 +1,8 @@
 include *.rst
 include LICENSE
-include drf_jsonschema/py.typed
-recursive-include drf_polymorphic *.html
-recursive-include drf_polymorphic *.txt
-recursive-include drf_polymorphic *.po
+include drf_jsonschema_serializer/py.typed
+recursive-include drf_jsonschema_serializer *.html
+recursive-include drf_jsonschema_serializer *.txt
+recursive-include drf_jsonschema_serializer *.po
 global-exclude __pycache__
 global-exclude *.py[co]

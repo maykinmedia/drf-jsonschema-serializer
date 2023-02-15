@@ -40,13 +40,13 @@ Here is an overview of the known differences:
 Public API
 ==========
 
-.. automodule:: drf_jsonschema
+.. automodule:: drf_jsonschema_serializer
     :members:
 
 Schema validation strictness
 ============================
 
-:class:`drf_jsonschema.JSONSchemaField` performs schema validation to a varying degree
+:class:`drf_jsonschema_serializer.JSONSchemaField` performs schema validation to a varying degree
 of strictness. Many format validations are implemented via additional, optional
 libraries. For a reference of builtins, see ``jsonschema._formats`` and look for the
 attempted imports.

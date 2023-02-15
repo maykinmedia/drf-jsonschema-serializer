@@ -15,13 +15,16 @@ implementation and ground work.
 User upgrading from the Github version should look out for some potentially breaking
 changes:
 
+* Package renamed to drf-jsonschema-serializer since drf-jsonschema is taken on PyPI.
+  This affects the imports to avoid namespace collisions - replace ``drf_jsonschema``
+  with ``drf_jsonschema_serializer``.
 * Schema validation is now done against draft 2020-12 rather than Draft4 of jsonschema
 * Validation of the format key may uninentionally be relaxed - typically you need some
   additional libraries for that. The easiest mitigation is installing with the extra:
 
   .. code-block:: bash
 
-     pip install drf-jsonschema[all-format-validators]
+     pip install drf-jsonschema-serializer[all-format-validators]
 
 * Support dropped for Django < 3.2 and djangorestframework < 3.13
 * Support dropped for Python < 3.8
