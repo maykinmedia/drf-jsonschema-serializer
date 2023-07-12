@@ -2,6 +2,15 @@
 Changelog
 =========
 
+2.0.0 (2023-07-11)
+==================
+
+No changes in functionality or public API, just our supported versions of Python/Django:
+
+* Dropped support for end-of-life Django 4.0.x
+* Confirmed support for Python 3.11
+* Confirmed support for Django 4.2
+
 1.0.0 (2023-02-14)
 ==================
 
