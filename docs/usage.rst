@@ -31,7 +31,7 @@ Basic usage of conversion
 
 .. code-block:: python
 
-    from drf_jsonschema import to_jsonschema
+    from drf_jsonschema_serializer import to_jsonschema
     from rest_framework import serializers
 
 
@@ -45,7 +45,7 @@ Basic usage of JSONSchemaField
 
 .. code-block:: python
 
-    from drf_jsonschema import JSONSchemaField
+    from drf_jsonschema_serializer import JSONSchemaField
     from rest_framework import serializers
 
     my_schema = {
@@ -68,7 +68,7 @@ Basic usage of SerializerJSONField
 
 .. code-block:: python
 
-    from drf_jsonschema import SerializerJSONField
+    from drf_jsonschema_serializer import SerializerJSONField
     from rest_framework import serializers
 
 
