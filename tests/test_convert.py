@@ -204,6 +204,22 @@ class URLFieldBasic(serializers.Serializer):
 
 
 @register
+class UUIDFieldBasic(serializers.Serializer):
+    foo = serializers.UUIDField()
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {"type": "string", "format": "uuid", "title": "Foo"},
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": "6a61f4ca-968a-429b-a3ae-9b88b732957f"}]
+    invalid = [{"foo": "something"}, {"foo": ""}]
+
+
+@register
 class IntegerField(serializers.Serializer):
     foo = serializers.IntegerField()
 
