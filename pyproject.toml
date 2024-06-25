@@ -36,7 +36,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/maykinmedia/drf-jsonschema-serializer"
-Documentation = "http://drf-jsonschema-serializer.readthedocs.io/en/latest/"
+Documentation = "https://drf-jsonschema.readthedocs.io/en/stable/"
 "Bug Tracker" = "https://github.com/maykinmedia/drf-jsonschema-serializer/issues"
 "Source Code" = "https://github.com/maykinmedia/drf-jsonschema-serializer"
 Changelog = "https://github.com/maykinmedia/drf-jsonschema-serializer/blob/main/docs/changelog.rst"
