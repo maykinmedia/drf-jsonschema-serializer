@@ -15,15 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.8', '3.9', '3.10', '3.11']
-        django: ['3.2', '4.1', '4.2']
-        exclude:
-            - python: '3.11'
-              django: '3.2'
+        python: ['3.10', '3.11', '3.12']
+        django: ['4.2']
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
 
@@ -37,18 +34,20 @@ jobs:
           DJANGO: ${{ matrix.django }}
 
       - name: Publish coverage report
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   type-checks:
     name: Run type checks on Python ${{ matrix.python }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.8', '3.9', '3.10']
+        python: ['3.10', '3.11', '3.12']
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
 
@@ -66,22 +65,22 @@ jobs:
     needs:
       - tests
       - type-checks
+    environment: release
+    permissions:
+      id-token: write
 
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Build sdist and wheel
+      - name: Build wheel
         run: |
-          pip install pip setuptools wheel --upgrade
-          python setup.py sdist bdist_wheel
+          pip install build --upgrade
+          python -m build
 
       - name: Publish a Python distribution to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}

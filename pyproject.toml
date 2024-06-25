@@ -1,0 +1,138 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drf-jsonschema-serializer"
+version = "2.0.0"
+description = "JSON Schema support for Django REST Framework"
+authors = [
+    {name = "Maykin Media", email = "support@maykinmedia.nl"},
+    {name = "ISProjects", email = "support@isprojects.nl"},
+]
+readme = "README.rst"
+license = {file = "LICENSE"}
+keywords = ["django", "rest", "polymorphic"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "django>=4.2",
+    "djangorestframework>=3.13",
+    "jsonschema>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/maykinmedia/drf-jsonschema-serializer"
+Documentation = "http://drf-jsonschema-serializer.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/maykinmedia/drf-jsonschema-serializer/issues"
+"Source Code" = "https://github.com/maykinmedia/drf-jsonschema-serializer"
+Changelog = "https://github.com/maykinmedia/drf-jsonschema-serializer/blob/main/docs/changelog.rst"
+
+[project.optional-dependencies]
+all-format-validators = [
+    "fqdn",
+    "idna",
+    "rfc3987",
+    "rfc3339-validator",
+    "webcolors",
+    "jsonpointer",
+    "uri_template",
+    "isoduration",
+]
+tests = [
+    "fqdn",
+    "idna",
+    "rfc3987",
+    "rfc3339-validator",
+    "webcolors",
+    "jsonpointer",
+    "uri_template",
+    "isoduration",
+    "pytest",
+    "pytest-django",
+    "tox",
+    "isort",
+    "black",
+    "flake8",
+    "mypy",
+    "django-stubs[compatible-mypy]",
+    "djangorestframework-stubs[compatible-mypy]",
+    "types-jsonschema",
+]
+coverage = [
+    "pytest-cov",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+release = [
+    "bump-my-version",
+    "twine",
+]
+
+[tool.setuptools.packages.find]
+include = ["drf_jsonschema_serializer*"]
+namespaces = false
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+known_django = "django"
+known_first_party="drf_jsonschema_serializer"
+sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+skip = ["env", "node_modules", ".tox"]
+skip_glob = ["**/migrations/**"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "testapp.settings"
+pythonpath = "."
+
+[tool.bumpversion]
+current_version = "2.0.0"
+files = [
+    {filename = "pyproject.toml"},
+    {filename = "README.rst"},
+    {filename = "docs/conf.py"},
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "drf_jsonschema_serializer"
+]
+
+[tool.coverage.report]
+skip_covered = true
+exclude_also = [
+    "if (typing\\.)?TYPE_CHECKING:",
+    "@(typing\\.)?overload",
+    "class .*\\(.*Protocol.*\\):",
+    "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+    "\\.\\.\\.",
+    "pass",
+]
+
+[tool.mypy]
+plugins = [
+    "mypy_django_plugin.main",
+    "mypy_drf_plugin.main",
+]
+
+[tool.django-stubs]
+django_settings_module = "testapp.settings"
