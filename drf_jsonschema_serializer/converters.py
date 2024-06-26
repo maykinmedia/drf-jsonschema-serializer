@@ -81,6 +81,12 @@ class URLFieldConverter(CharFieldConverter):
 
 
 @converter
+class UUIDFieldConverter(FormatConverter):
+    field_class = serializers.UUIDField
+    format = "uuid"
+
+
+@converter
 class BooleanFieldConverter(Converter):
     type = "boolean"
     field_class = [serializers.BooleanField]
