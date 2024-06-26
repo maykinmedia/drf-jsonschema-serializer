@@ -2,6 +2,17 @@
 Changelog
 =========
 
+3.0.0 (2024-06-26)
+==================
+
+* Added support for ``UUIDField``.
+
+Updated supported versions:
+
+* Dropped support for end-of-life Django 3.2 and 4.1.
+* Dropped support for Python 3.8 and 3.9.
+* Confirmed support for Python 3.12.
+
 2.0.0 (2023-07-11)
 ==================
 

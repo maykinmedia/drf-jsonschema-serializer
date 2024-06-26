@@ -19,7 +19,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testapp.settings")
 project = "drf-jsonschema-serializer"
 copyright = "2023, Maykin Media"
 author = "Maykin Media"
-release = "2.0.0"
+release = "3.0.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

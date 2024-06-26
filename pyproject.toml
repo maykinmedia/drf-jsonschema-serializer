@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drf-jsonschema-serializer"
-version = "2.0.0"
+version = "3.0.0"
 description = "JSON Schema support for Django REST Framework"
 authors = [
     {name = "Maykin Media", email = "support@maykinmedia.nl"},
