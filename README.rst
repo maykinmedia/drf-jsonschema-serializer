@@ -2,7 +2,7 @@
 Django REST Framework JSON Schema support
 =========================================
 
-:Version: 2.0.0
+:Version: 3.0.0
 :Source: https://github.com/maykinmedia/drf-jsonschema-serializer
 :Keywords: django, rest, jsonschema
 
