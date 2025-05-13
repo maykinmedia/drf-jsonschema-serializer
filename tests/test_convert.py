@@ -595,6 +595,244 @@ class ChoiceFieldBool(serializers.Serializer):
     invalid = [{}, {"foo": None}, {"foo": ""}, {"foo": "d"}, {"foo": 1}]
 
 
+@register
+class MultipleChoiceFieldStrings(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=["a", "b", "c"])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": "string",
+                    "enum": ["a", "b", "c"],
+                },
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": ["a"]}, {"foo": ["b"]}, {"foo": ["c"]}]
+    invalid = [{}, {"foo": None}, {"foo": [""]}, {"foo": ["d"]}, {"foo": [1]}]
+
+
+@register
+class MultipleChoiceFieldStringsAllowBlank(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=["a", "b", "c"], allow_blank=True)
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": "string",
+                    "enum": ["", "a", "b", "c"],
+                },
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": ["a"]}, {"foo": ["b"]}, {"foo": ["c"]}, {"foo": [""]}]
+    invalid = [{}, {"foo": None}, {"foo": ["d"]}, {"foo": [1]}]
+
+
+@register
+class MultipleChoiceFieldStringsBlankChoice(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=["", "a", "b", "c"])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {"type": "string", "enum": ["", "a", "b", "c"]},
+            },
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": ["a"]}, {"foo": ["b"]}, {"foo": ["c"]}, {"foo": [""]}]
+    invalid = [{}, {"foo": None}, {"foo": ["d"]}, {"foo": [1]}]
+
+
+@register
+class MultipleChoiceFieldStringsNullChoice(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(
+        choices=[(None, "Nothing"), "a", "b", "c"], allow_null=True
+    )
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": ["null", "string"],
+                    "enum": [None, "a", "b", "c"],
+                    "enumNames": ["Nothing", "a", "b", "c"],
+                },
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [
+        {"foo": [None]},
+        {"foo": []},
+        {"foo": ["a"]},
+        {"foo": ["b"]},
+        {"foo": ["c"]},
+    ]
+    invalid = [{}, {"foo": [""]}, {"foo": ["d"]}, {"foo": [1]}]
+
+
+@register
+class MultipleChoiceFieldDisplayNames(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=[("a", "A"), ("b", "B"), ("c", "C")])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": "string",
+                    "enum": ["a", "b", "c"],
+                    "enumNames": ["A", "B", "C"],
+                },
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": ["a"]}, {"foo": ["b"]}, {"foo": ["c"]}]
+    invalid = [{}, {"foo": None}, {"foo": [""]}, {"foo": ["d"]}, {"foo": [1]}]
+
+
+@register
+class MultipleChoiceFieldInts(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=[1, 2, 3])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {"type": "integer", "enum": [1, 2, 3]},
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": [1]}, {"foo": [2]}, {"foo": [3]}]
+    invalid = [{}, {"foo": None}, {"foo": [""]}, {"foo": ["d"]}, {"foo": [4]}]
+
+
+@register
+class MultipleChoiceFieldIntsDisplaynames(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(
+        choices=[(1, "One"), (2, "Two"), (3, "Three")]
+    )
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": "integer",
+                    "enum": [1, 2, 3],
+                    "enumNames": ["One", "Two", "Three"],
+                },
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": [1]}, {"foo": [2]}, {"foo": [3]}]
+    invalid = [{}, {"foo": None}, {"foo": [""]}, {"foo": ["d"]}, {"foo": [4]}]
+
+
+@register
+class MultipleChoiceFieldFloats(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=[1.1, 2.1, 3.1])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {
+                    "type": "number",
+                    "enum": [1.1, 2.1, 3.1],
+                },
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": [1.1]}, {"foo": [2.1]}, {"foo": [3.1]}]
+    invalid = [
+        {},
+        {"foo": None},
+        {"foo": [""]},
+        {"foo": ["d"]},
+        {"foo": [4]},
+        {"foo": [1.2]},
+    ]
+
+
+@register
+class MultipleChoiceFieldMixed(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=["a", 1])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {"type": ["integer", "string"], "enum": ["a", 1]},
+            }
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": [1]}, {"foo": ["a"]}]
+    invalid = [{}, {"foo": None}, {"foo": ["b"]}, {"foo": [3]}]
+
+
+@register
+class MultipleChoiceFieldBool(serializers.Serializer):
+    foo = serializers.MultipleChoiceField(choices=[False, True])
+
+    json_schema = {
+        "type": "object",
+        "properties": {
+            "foo": {
+                "type": "array",
+                "title": "Foo",
+                "items": {"type": "boolean", "enum": [False, True]},
+            },
+        },
+        "required": ["foo"],
+    }
+
+    valid = [{"foo": []}, {"foo": [False]}, {"foo": [True]}]
+    invalid = [{}, {"foo": None}, {"foo": [""]}, {"foo": ["d"]}, {"foo": [1]}]
+
+
 class SubSerializer(serializers.Serializer):
     foo = serializers.IntegerField()
     bar = serializers.CharField()
