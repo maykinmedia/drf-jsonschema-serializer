@@ -172,23 +172,23 @@ class DateFieldConverter(BaseDateTimeFieldConverter):
     settings_input_formats = api_settings.DATE_INPUT_FORMATS
 
 
-@converter
-class ChoiceField:
-    field_class = serializers.ChoiceField
-
+class BaseChoiceFieldConverter:
     def convert(self, field):
         types = set()
         enum = []
-        enumNames = []
+        enum_names = []
+
         if field.allow_blank:
             enum.append("")
-            enumNames.append("")
+            enum_names.append("")
+
         has_display_names = False
         for choice, display_name in field.choices.items():
             if choice != display_name:
                 has_display_names = True
+
             enum.append(choice)
-            enumNames.append(display_name)
+            enum_names.append(display_name)
             # FIXME: what about choices such as datetime?
             # maybe we need a way to turn concrete instances into
             # the underlying DRF fields just for the sake of
@@ -203,21 +203,38 @@ class ChoiceField:
                 types.add("number")
             elif choice is None:
                 types.add("null")
+
         if field.allow_null:
             types.add("null")
+
             if enum[0] is not None:
                 enum.insert(0, None)
-                enumNames.insert(0, "")
+                enum_names.insert(0, "")
+
             has_display_names = True
 
         types = sorted(list(types))
-        if len(types) == 1:
-            type = types[0]
-        else:
-            type = types
-        result = {"type": type, "enum": enum}
+        result = {"type": types[0] if len(types) == 1 else types, "enum": enum}
         if has_display_names:
-            result["enumNames"] = enumNames
+            result["enumNames"] = enum_names
+        return result
+
+
+@converter
+class ChoiceField(BaseChoiceFieldConverter):
+    field_class = serializers.ChoiceField
+
+
+@converter
+class MultipleChoiceField(BaseChoiceFieldConverter):
+    field_class = serializers.MultipleChoiceField
+
+    def convert(self, field):
+        super_result = super().convert(field)
+        result = {
+            "items": super_result,
+            "type": "array",
+        }
         return result
 
 
